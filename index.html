@@ -1,0 +1,782 @@
+# france_m-Gamal-
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>اختبار اللغة الفرنسية</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, #10152b, #1c2850, #321b4d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 500px;
+            min-height: 650px;
+            background: rgba(255,255,255,0.10);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 28px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* الصفحة الرئيسية */
+
+        .home {
+            text-align: center;
+            padding-top: 90px;
+        }
+
+        .logo {
+            font-size: 75px;
+            margin-bottom: 20px;
+        }
+
+        .home h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .home p {
+            color: #d8d8e8;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 45px;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            background: #e53935;
+            color: white;
+            font-size: 21px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(229,57,53,0.35);
+            transition: 0.2s;
+        }
+
+        .start-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* شاشة الأسئلة */
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .question-number {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .score {
+            background: rgba(255,255,255,0.12);
+            padding: 8px 13px;
+            border-radius: 20px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 9px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 35px;
+        }
+
+        .progress {
+            height: 100%;
+            width: 20%;
+            background: #ffca28;
+            transition: width 0.4s;
+        }
+
+        .question-card {
+            background: rgba(0,0,0,0.20);
+            border-radius: 22px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .question-card h2 {
+            font-size: 25px;
+            line-height: 1.5;
+            direction: ltr;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .answer {
+            width: 100%;
+            padding: 17px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: white;
+            border-radius: 15px;
+            font-size: 19px;
+            cursor: pointer;
+            transition: 0.2s;
+            direction: ltr;
+        }
+
+        .answer:active {
+            transform: scale(0.98);
+        }
+
+        .answer.correct {
+            background: rgba(46, 204, 113, 0.25);
+            border-color: #2ecc71;
+        }
+
+        .answer.wrong {
+            background: rgba(231, 76, 60, 0.25);
+            border-color: #e74c3c;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 14px;
+            text-align: center;
+            display: none;
+            line-height: 1.7;
+        }
+
+        .feedback.correct-feedback {
+            display: block;
+            background: rgba(46,204,113,0.18);
+            color: #7dffab;
+        }
+
+        .feedback.wrong-feedback {
+            display: block;
+            background: rgba(231,76,60,0.18);
+            color: #ff9c94;
+        }
+
+        .next-btn {
+            display: none;
+            width: 100%;
+            margin-top: 18px;
+            padding: 16px;
+            border: none;
+            border-radius: 15px;
+            background: #3949ab;
+            color: white;
+            font-size: 19px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* النتيجة */
+
+        .result {
+            text-align: center;
+            padding-top: 70px;
+        }
+
+        .result-icon {
+            font-size: 85px;
+            margin-bottom: 20px;
+        }
+
+        .result h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 55px;
+            font-weight: bold;
+            color: #ffca28;
+            margin: 25px 0;
+        }
+
+        .result-message {
+            font-size: 19px;
+            line-height: 1.8;
+            color: #ddd;
+            margin-bottom: 35px;
+        }
+
+        .restart-btn {
+            width: 100%;
+            padding: 17px;
+            border: none;
+            border-radius: 15px;
+            background: #e53935;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- الصفحة الرئيسية -->
+    <div id="homeScreen" class="screen active home">
+
+        <div class="logo">🇫🇷</div>
+
+        <h1>اختبار اللغة الفرنسية</h1>
+
+        <p>
+            اختبر معلوماتك في اللغة الفرنسية
+            <br>
+            لديك 5 أسئلة فقط
+            <br>
+            حظًا موفقًا ❤️
+        </p>
+
+        <button class="start-btn" onclick="startQuiz()">
+            بدء الأسئلة
+        </button>
+
+    </div>
+
+
+    <!-- شاشة الأسئلة -->
+    <div id="quizScreen" class="screen">
+
+        <div class="top">
+
+            <div class="question-number" id="questionNumber">
+                السؤال 1 من 5
+            </div>
+
+            <div class="score">
+                ⭐ <span id="currentScore">0</span>
+            </div>
+
+        </div>
+
+        <div class="progress-container">
+            <div class="progress" id="progress"></div>
+        </div>
+
+
+        <div class="question-card">
+
+            <h2 id="questionText"></h2>
+
+        </div>
+
+
+        <div class="answers" id="answersContainer"></div>
+
+
+        <div id="feedback" class="feedback"></div>
+
+
+        <button id="nextBtn" class="next-btn" onclick="nextQuestion()">
+            السؤال التالي ➜
+        </button>
+
+    </div>
+
+
+    <!-- شاشة النتيجة -->
+    <div id="resultScreen" class="screen result">
+
+        <div class="result-icon">
+            🏆
+        </div>
+
+        <h1>انتهى الاختبار!</h1>
+
+        <div class="final-score">
+            <span id="finalScore">0</span> / 5
+        </div>
+
+        <div class="result-message" id="resultMessage">
+        </div>
+
+        <button class="restart-btn" onclick="restartQuiz()">
+            إعادة الاختبار 🔄
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+    =========================================
+    الأسئلة
+    =========================================
+    */
+
+    const questions = [
+
+        {
+            question: "....... âge tu as?",
+            answers: ["Quel", "Quelle", "Quelles"],
+            correct: "Quel"
+        },
+
+        {
+            question: "Je....... content",
+            answers: ["es", "suis", "est"],
+            correct: "suis"
+        },
+
+        {
+            question: "Il...... un stylo",
+            answers: ["a", "as", "ai"],
+            correct: "a"
+        },
+
+        {
+            question: "J'....... le rouge",
+            answers: ["aime", "regarde", "vais"],
+            correct: "aime"
+        },
+
+        {
+            question: "....... tu t'appelles",
+            answers: ["comment", "Que", "Qui"],
+            correct: "comment"
+        }
+
+    ];
+
+
+    /*
+    =========================================
+    المتغيرات
+    =========================================
+    */
+
+    let currentQuestion = 0;
+
+    let playerScore = 0;
+
+    let answered = false;
+
+
+    /*
+    =========================================
+    بدء الاختبار
+    =========================================
+    */
+
+    function startQuiz() {
+
+        currentQuestion = 0;
+
+        playerScore = 0;
+
+        document.getElementById("homeScreen")
+            .classList.remove("active");
+
+        document.getElementById("resultScreen")
+            .classList.remove("active");
+
+        document.getElementById("quizScreen")
+            .classList.add("active");
+
+        showQuestion();
+
+    }
+
+
+    /*
+    =========================================
+    عرض السؤال
+    =========================================
+    */
+
+    function showQuestion() {
+
+        answered = false;
+
+        const question = questions[currentQuestion];
+
+        document.getElementById("questionNumber").textContent =
+            "السؤال " + (currentQuestion + 1) + " من " + questions.length;
+
+
+        document.getElementById("questionText").textContent =
+            question.question;
+
+
+        document.getElementById("currentScore").textContent =
+            playerScore;
+
+
+        /*
+        تحديث شريط التقدم
+        */
+
+        const progress =
+            ((currentQuestion + 1) / questions.length) * 100;
+
+        document.getElementById("progress").style.width =
+            progress + "%";
+
+
+        /*
+        حذف الإجابات القديمة
+        */
+
+        const container =
+            document.getElementById("answersContainer");
+
+        container.innerHTML = "";
+
+
+        /*
+        إخفاء الرسالة
+        */
+
+        const feedback =
+            document.getElementById("feedback");
+
+        feedback.className = "feedback";
+
+        feedback.innerHTML = "";
+
+
+        /*
+        إخفاء زر السؤال التالي
+        */
+
+        document.getElementById("nextBtn")
+            .style.display = "none";
+
+
+        /*
+        إنشاء أزرار الإجابات
+        */
+
+        question.answers.forEach(function(answer) {
+
+            const button =
+                document.createElement("button");
+
+            button.className = "answer";
+
+            button.textContent = answer;
+
+            button.onclick = function() {
+
+                checkAnswer(button, answer);
+
+            };
+
+            container.appendChild(button);
+
+        });
+
+    }
+
+
+    /*
+    =========================================
+    فحص الإجابة
+    =========================================
+    */
+
+    function checkAnswer(button, selectedAnswer) {
+
+        /*
+        منع الضغط أكثر من مرة
+        */
+
+        if (answered) {
+            return;
+        }
+
+        answered = true;
+
+
+        const question =
+            questions[currentQuestion];
+
+
+        const allButtons =
+            document.querySelectorAll(".answer");
+
+
+        /*
+        تعطيل كل الأزرار
+        */
+
+        allButtons.forEach(function(btn) {
+
+            btn.disabled = true;
+
+        });
+
+
+        const feedback =
+            document.getElementById("feedback");
+
+
+        /*
+        الإجابة الصحيحة
+        */
+
+        if (selectedAnswer === question.correct) {
+
+            playerScore++;
+
+            button.classList.add("correct");
+
+            feedback.className =
+                "feedback correct-feedback";
+
+            feedback.innerHTML =
+                "✅ إجابة صحيحة! أحسنت 👏";
+
+        }
+
+
+        /*
+        الإجابة الخاطئة
+        */
+
+        else {
+
+            button.classList.add("wrong");
+
+
+            /*
+            تمييز الإجابة الصحيحة
+            */
+
+            allButtons.forEach(function(btn) {
+
+                if (btn.textContent === question.correct) {
+
+                    btn.classList.add("correct");
+
+                }
+
+            });
+
+
+            feedback.className =
+                "feedback wrong-feedback";
+
+            feedback.innerHTML =
+                "❌ جواب خاطئ<br>" +
+                "الإجابة الصحيحة هي: <strong>" +
+                question.correct +
+                "</strong>";
+
+        }
+
+
+        document.getElementById("currentScore")
+            .textContent = playerScore;
+
+
+        /*
+        إظهار زر السؤال التالي
+        */
+
+        const nextButton =
+            document.getElementById("nextBtn");
+
+        nextButton.style.display = "block";
+
+
+        /*
+        تغيير النص في السؤال الأخير
+        */
+
+        if (currentQuestion === questions.length - 1) {
+
+            nextButton.textContent =
+                "عرض النتيجة 🏆";
+
+        }
+
+    }
+
+
+    /*
+    =========================================
+    السؤال التالي
+    =========================================
+    */
+
+    function nextQuestion() {
+
+        currentQuestion++;
+
+
+        /*
+        هل انتهت الأسئلة؟
+        */
+
+        if (currentQuestion >= questions.length) {
+
+            showResult();
+
+            return;
+
+        }
+
+
+        /*
+        عرض السؤال الجديد
+        */
+
+        showQuestion();
+
+    }
+
+
+    /*
+    =========================================
+    النتيجة النهائية
+    =========================================
+    */
+
+    function showResult() {
+
+        document.getElementById("quizScreen")
+            .classList.remove("active");
+
+
+        document.getElementById("resultScreen")
+            .classList.add("active");
+
+
+        document.getElementById("finalScore")
+            .textContent = playerScore;
+
+
+        let message = "";
+
+
+        if (playerScore === 5) {
+
+            message =
+                "ممتاز جدًا! 🌟<br>" +
+                "لقد أجبت عن جميع الأسئلة بشكل صحيح.";
+
+        }
+
+        else if (playerScore === 4) {
+
+            message =
+                "أداء رائع جدًا! 👏<br>" +
+                "خطأ واحد فقط، استمر في المذاكرة.";
+
+        }
+
+        else if (playerScore === 3) {
+
+            message =
+                "جيد جدًا 👍<br>" +
+                "يمكنك تحسين نتيجتك بالمزيد من التدريب.";
+
+        }
+
+        else if (playerScore === 2) {
+
+            message =
+                "نتيجة جيدة كبداية 💪<br>" +
+                "حاول مراجعة القواعد الفرنسية مرة أخرى.";
+
+        }
+
+        else if (playerScore === 1) {
+
+            message =
+                "لا تقلق ❤️<br>" +
+                "المحاولة الأولى هي بداية التعلم.";
+
+        }
+
+        else {
+
+            message =
+                "حاول مرة أخرى 💪<br>" +
+                "راجع الدرس ثم أعد الاختبار.";
+
+        }
+
+
+        document.getElementById("resultMessage")
+            .innerHTML = message;
+
+    }
+
+
+    /*
+    =========================================
+    إعادة الاختبار
+    =========================================
+    */
+
+    function restartQuiz() {
+
+        document.getElementById("resultScreen")
+            .classList.remove("active");
+
+
+        document.getElementById("quizScreen")
+            .classList.add("active");
+
+
+        currentQuestion = 0;
+
+        playerScore = 0;
+
+        showQuestion();
+
+    }
+
+</script>
+
+</body>
+</html>
